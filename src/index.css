@@ -1,1 +1,172 @@
 @import "tailwindcss";
+
+/* outfit-500 - medium */
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/fonts/outfit-v15-latin-500.woff2") format("woff2");
+}
+/* outfit-700 - bold */
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/outfit-v15-latin-700.woff2") format("woff2");
+}
+
+@theme {
+  /* fonts collection */
+  --font-outfit: "Outfit", sans-serif;
+
+  /* colors collection */
+  --color-neutral-0: #ffffff;
+  --color-neutral-950: #000000;
+  --color-slate-100: #dbe8ed;
+  --color-slate-300: #a8bfc9;
+  --color-slate-800: #1f3641;
+  --color-slate-900: #1a2a33;
+  --color-amber-300: #ffc860;
+  --color-amber-400: #f2b137;
+  --color-slate-850: #21313b;
+  --color-teal-300: #65e9e4;
+  --color-teal-400: #31c3bd;
+}
+
+/*typography collection */
+@utility text-preset-1 {
+  font-family: var(--font-outfit);
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 125%;
+  letter-spacing: 0.06em;
+}
+@utility text-preset-2 {
+  font-family: var(--font-outfit);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 125%;
+  letter-spacing: 0.05em;
+}
+@utility text-preset-3 {
+  font-family: var(--font-outfit);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 125%;
+  letter-spacing: 0.06em;
+}
+@utility text-preset-4 {
+  font-family: var(--font-outfit);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 125%;
+  letter-spacing: 0.06em;
+}
+@utility text-preset-5 {
+  font-family: var(--font-outfit);
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 130%;
+  letter-spacing: 0.06em;
+}
+@utility text-preset-5-medium {
+  font-family: var(--font-outfit);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 130%;
+  letter-spacing: 0.06em;
+}
+@utility text-preset-6-medium {
+  font-family: var(--font-outfit);
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 125%;
+  letter-spacing: 0.06em;
+}
+/* Buttons collection */
+@utility button-style-general {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  color: var(--color-slate-900);
+  filter: drop-shadow(0px -8px 0 0 rgba(16, 33, 42, 0.5));
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.2s ease;
+  stroke: rgba(151, 151, 151, 1);
+}
+/*Button style-1 */
+@utility button-style-1 {
+  background-color: var(--color-amber-400);
+  box-shadow: inset 0 -8px 0 0 rgba(204, 139, 19, 1);
+  padding-bottom: 1.5rem;
+}
+@utility button-style-1-hover {
+  background-color: var(--color-amber-300);
+  box-shadow: inset 0 -8px 0 0 rgba(204, 139, 19, 1);
+  padding-bottom: 1.5rem;
+}
+
+@utility button-primary {
+  @apply button-style-general button-style-1 text-preset-3;
+}
+@utility button-primary-hover {
+  @apply button-style-general button-style-1-hover text-preset-3;
+}
+/*button style-2 */
+@utility button-style-2 {
+  background-color: var(--color-teal-400);
+  box-shadow: inset 0 -8px 0 0 rgba(17, 140, 135, 1);
+  padding-bottom: 1.5rem;
+}
+@utility button-style-2-hover {
+  background-color: var(--color-teal-300);
+  box-shadow: inset 0 -8px 0 0 rgba(17, 140, 135, 1);
+  padding-bottom: 1.5rem;
+}
+@utility button-secondary {
+  @apply button-style-general button-style-2 text-preset-3;
+}
+@utility button-secondary-hover {
+  @apply button-style-general button-style-2-hover text-preset-3;
+}
+/*button style-3 */
+@utility button-style-3 {
+  background-color: var(--color-amber-400);
+  box-shadow: inset 0 -8px 0 0 rgba(204, 139, 19, 1);
+}
+@utility button-style-3-hover {
+  background-color: var(--color-amber-300);
+  box-shadow: inset 0 -8px 0 0 rgba(204, 139, 19, 1);
+}
+@utility button-tertiary {
+  @apply button-style-general button-style-3 text-preset-4;
+}
+@utility button-tertiary-hover {
+  @apply button-style-general button-style-3-hover text-preset-4;
+}
+/*button style-4 */
+@utility button-style-4 {
+  background-color: var(--color-slate-300);
+  box-shadow: inset 0 -4px 0 0 rgba(107, 137, 151, 1);
+}
+@utility button-style-4-hover {
+  background-color: var(--color-slate-100);
+  box-shadow: inset 0 -4px 0 0 rgba(107, 137, 151, 1);
+}
+@utility button-quaternary {
+  @apply button-style-general button-style-4 text-preset-4;
+}
+@utility button-quaternary-hover {
+  @apply button-style-general button-style-4-hover text-preset-4;
+}
+
+button:active {
+  transform: translateY(2px);
+}
