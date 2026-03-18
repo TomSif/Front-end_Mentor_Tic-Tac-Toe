@@ -34,10 +34,10 @@ function App() {
   return (
     <>
       <main
-        className="bg-slate-900 h-screen w-full flex flex-col items-center justify-center"
+        className="w-full bg-slate-900 h-screen  flex flex-col items-center justify-center "
         id="main"
       >
-        <div>{views[currentView]}</div>
+        {views[currentView]}
       </main>
     </>
   );
