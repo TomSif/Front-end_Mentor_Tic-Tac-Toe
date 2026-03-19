@@ -22,7 +22,7 @@ function App() {
       <Game
         firstPlayerChoice={firstPlayerChoice}
         gameMode={gameMode!}
-        onReStart={() => {
+        onQuit={() => {
           setFirstPlayerChoice("X");
           setGameMode(null);
           setCurrentView("menu");

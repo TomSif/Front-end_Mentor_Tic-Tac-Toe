@@ -1,30 +1,31 @@
 import { useState } from "react";
 import Cell from "./Cell";
+import Modal from "./Modal";
 
 interface GameProps {
-  onReStart: () => void;
+  onQuit: () => void;
   gameMode: "cpu" | "human";
   firstPlayerChoice: "X" | "O";
 }
+const WIN_COMBS = [
+  [0, 1, 2], //1st h
+  [3, 4, 5], //2nd h
+  [6, 7, 8], //3rd h
+  [0, 3, 6], //1st v
+  [1, 4, 7], //2nd v
+  [2, 5, 8], //3rd v
+  [0, 4, 8], //1st d
+  [2, 4, 6], //2nd d
+];
 
-function Game({ onReStart, gameMode, firstPlayerChoice }: GameProps) {
-  const [playerTurn, setPlayerTurn] = useState<"X" | "O">("X");
+function Game({ onQuit, gameMode, firstPlayerChoice }: GameProps) {
+  const [playerTurn, setPlayerTurn] = useState<"X" | "O">(firstPlayerChoice);
   const [scoreX, setScoreX] = useState<number>(0);
   const [scoreT, setScoreT] = useState<number>(0);
   const [scoreO, setScoreO] = useState<number>(0);
   const [board, setBoard] = useState<("X" | "O" | null)[]>(Array(9).fill(null));
   const [gameIsOver, setGameIsOver] = useState<boolean>(false);
-
-  const WIN_COMBS = [
-    [0, 1, 2], //1st h
-    [3, 4, 5], //2nd h
-    [6, 7, 8], //3rd h
-    [0, 3, 6], //1st v
-    [1, 4, 7], //2nd v
-    [2, 5, 8], //3rd v
-    [0, 4, 8], //1st d
-    [2, 4, 6], //2nd d
-  ];
+  const [winnerIs, setWinnerIs] = useState<"X" | "O" | "Tie" | null>(null);
 
   function checkWinner(board: ("X" | "O" | null)[]) {
     const winner = WIN_COMBS.find(
@@ -41,8 +42,7 @@ function Game({ onReStart, gameMode, firstPlayerChoice }: GameProps) {
     if (newWinner === "X") {
       setScoreX((prev) => prev + 1);
       setGameIsOver(true);
-    }
-    if (newWinner === "O") {
+    } else if (newWinner === "O") {
       setScoreO((prev) => prev + 1);
       setGameIsOver(true);
     } else {
@@ -50,8 +50,21 @@ function Game({ onReStart, gameMode, firstPlayerChoice }: GameProps) {
     }
   }
 
+  function openModal(newWinner: "X" | "O" | "Tie" | null) {
+    setWinnerIs(newWinner);
+  }
+
+  function onRestart() {
+    setGameIsOver(false);
+    setBoard(Array(9).fill(null));
+    setWinnerIs(null);
+  }
+
   return (
-    <div className=" w-full flex flex-col items-center md:max-w-115 gap-5">
+    <div className=" w-full flex flex-col items-center md:max-w-115 gap-5 relative z-10">
+      {winnerIs !== null && (
+        <Modal winner={winnerIs} onRestart={onRestart} onQuit={onQuit} />
+      )}
       <section className="grid grid-cols-3 gap-5 justify-between items-center h-10 w-full mb-11 md:mb-0">
         <img
           className="w-17.5 col-start-1 justify-self-start"
@@ -93,7 +106,7 @@ function Game({ onReStart, gameMode, firstPlayerChoice }: GameProps) {
         </div>
         <button
           aria-label="restart button"
-          // onClick={() =>}
+          onClick={() => onQuit()}
           className="col-start-3 justify-self-end flex items-center justify-center button-style-4 hover:button-style-4-hover w-10 h-10 rounded-md"
         >
           <img src="/images/icon-restart.svg" alt="" />
@@ -113,11 +126,15 @@ function Game({ onReStart, gameMode, firstPlayerChoice }: GameProps) {
                     setBoard(newBoard);
                     const newWinner = checkWinner(newBoard);
                     score(newWinner);
+                    if (newWinner) {
+                      openModal(newWinner);
+                    }
                     if (
                       newBoard.every((cell) => cell !== null) &&
                       newWinner === null
                     ) {
                       setScoreT((prev) => prev + 1);
+                      openModal("Tie");
                       return;
                     } else {
                       setPlayerTurn((prev) => (prev === "X" ? "O" : "X"));
