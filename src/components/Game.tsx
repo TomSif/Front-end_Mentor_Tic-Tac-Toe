@@ -13,10 +13,46 @@ function Game({ onReStart, gameMode, firstPlayerChoice }: GameProps) {
   const [scoreT, setScoreT] = useState<number>(0);
   const [scoreO, setScoreO] = useState<number>(0);
   const [board, setBoard] = useState<("X" | "O" | null)[]>(Array(9).fill(null));
+  const [gameIsOver, setGameIsOver] = useState<boolean>(false);
+
+  const WIN_COMBS = [
+    [0, 1, 2], //1st h
+    [3, 4, 5], //2nd h
+    [6, 7, 8], //3rd h
+    [0, 3, 6], //1st v
+    [1, 4, 7], //2nd v
+    [2, 5, 8], //3rd v
+    [0, 4, 8], //1st d
+    [2, 4, 6], //2nd d
+  ];
+
+  function checkWinner(board: ("X" | "O" | null)[]) {
+    const winner = WIN_COMBS.find(
+      ([a, b, c]) => board[a] && board[a] === board[b] && board[a] === board[c],
+    );
+    if (winner) {
+      return board[winner[0]];
+    } else {
+      return null;
+    }
+  }
+
+  function score(newWinner: "X" | "O" | null) {
+    if (newWinner === "X") {
+      setScoreX((prev) => prev + 1);
+      setGameIsOver(true);
+    }
+    if (newWinner === "O") {
+      setScoreO((prev) => prev + 1);
+      setGameIsOver(true);
+    } else {
+      return null;
+    }
+  }
 
   return (
-    <div className="p-6 w-full ">
-      <section className="grid grid-cols-3 gap-5 justify-between items-center h-10 w-full">
+    <div className=" w-full flex flex-col items-center md:max-w-115 gap-5">
+      <section className="grid grid-cols-3 gap-5 justify-between items-center h-10 w-full mb-11 md:mb-0">
         <img
           className="w-17.5 col-start-1 justify-self-start"
           src="/images/logo.svg"
@@ -25,7 +61,7 @@ function Game({ onReStart, gameMode, firstPlayerChoice }: GameProps) {
         <div
           aria-description={`player turn is ${playerTurn}`}
           aria-live="polite"
-          className="col-start-2 justify-self-center w-full flex text-slate-300 pt-2 pb-1 gap-3 text-preset-4 game-box-general items-center justify-center rounded-sm shadow-[inset_0_-4px_0_0_rgba(16,33,42,1)]"
+          className="col-start-2 justify-self-center w-full min-h-full flex text-slate-300 pt-2 pb-2 gap-3 text-preset-4 game-cell items-center justify-center rounded-sm shadow-[inset_0_-4px_0_0_rgba(16,33,42,1)]"
         >
           {playerTurn === "X" ? (
             <svg
@@ -63,18 +99,29 @@ function Game({ onReStart, gameMode, firstPlayerChoice }: GameProps) {
           <img src="/images/icon-restart.svg" alt="" />
         </button>
       </section>
-      <section className="" id="game-grid">
-        <ul className="grid grid-cols-3 gap-12.5 grid-rows-3">
+      <section className="w-full flex flex-col items-center" id="game-grid">
+        <ul className="w-full  grid grid-cols-3 gap-5 grid-rows-3">
           {board.map((cell, index) => {
             return (
-              <li key={index}>
+              <li className="aspect-square" key={index}>
                 <Cell
                   value={cell}
                   onClick={() => {
+                    if (gameIsOver) return;
                     const newBoard = [...board];
                     newBoard[index] = playerTurn;
                     setBoard(newBoard);
-                    setPlayerTurn((prev) => (prev === "X" ? "O" : "X"));
+                    const newWinner = checkWinner(newBoard);
+                    score(newWinner);
+                    if (
+                      newBoard.every((cell) => cell !== null) &&
+                      newWinner === null
+                    ) {
+                      setScoreT((prev) => prev + 1);
+                      return;
+                    } else {
+                      setPlayerTurn((prev) => (prev === "X" ? "O" : "X"));
+                    }
                   }}
                 />
               </li>

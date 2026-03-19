@@ -6,7 +6,7 @@ interface CellProps {
 function Cell({ value, onClick }: CellProps) {
   return (
     <button
-      className="w-full flex items-center justify-center game-box-general p-6"
+      className="w-full flex items-center justify-center game-cell p-6  aspect-square "
       onClick={onClick}
       disabled={value !== null}
     >
