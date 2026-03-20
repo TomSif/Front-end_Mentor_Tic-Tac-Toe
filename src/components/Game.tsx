@@ -19,6 +19,46 @@ const WIN_COMBS = [
   [2, 4, 6], //2nd d
 ];
 
+function getCpuMove(board: ("X" | "O" | null)[], cpuMark: "X" | "O") {
+  const humanMark = cpuMark === "X" ? "O" : "X";
+  const CpuWinner = WIN_COMBS.find(
+    ([a, b, c]) =>
+      (board[a] === cpuMark && board[b] === cpuMark && board[c] === null) ||
+      (board[a] === cpuMark && board[b] === null && board[c] === cpuMark) ||
+      (board[a] === null && board[b] === cpuMark && board[c] === cpuMark),
+  );
+  if (CpuWinner) {
+    const [a, b, c] = CpuWinner;
+
+    if (board[a] === null) return a;
+    if (board[b] === null) return b;
+    if (board[c] === null) return c;
+  }
+
+  const humanWinner = WIN_COMBS.find(
+    ([a, b, c]) =>
+      (board[a] === humanMark && board[b] === humanMark && board[c] === null) ||
+      (board[a] === humanMark && board[b] === null && board[c] === humanMark) ||
+      (board[a] === null && board[b] === humanMark && board[c] === humanMark),
+  );
+
+  if (humanWinner) {
+    const [d, f, g] = humanWinner;
+
+    if (board[d] === null) return d;
+    if (board[f] === null) return f;
+    if (board[g] === null) return g;
+  } else {
+    const emptyCells = board
+      .map((cell, index) => (cell === null ? index : null))
+      .filter((index) => index !== null);
+
+    const randomIndex = Math.floor(Math.random() * emptyCells.length);
+    const randomPlay = emptyCells[randomIndex];
+    return randomPlay;
+  }
+}
+
 function Game({ onQuit, gameMode, firstPlayerChoice }: GameProps) {
   const [playerTurn, setPlayerTurn] = useState<"X" | "O">(firstPlayerChoice);
   const [scoreX, setScoreX] = useState<number>(0);
@@ -139,6 +179,7 @@ function Game({ onQuit, gameMode, firstPlayerChoice }: GameProps) {
                       score(newWinner);
                       if (newWinner) {
                         openModal(newWinner);
+                        return;
                       }
                       if (
                         newBoard.every((cell) => cell !== null) &&
@@ -149,6 +190,23 @@ function Game({ onQuit, gameMode, firstPlayerChoice }: GameProps) {
                         return;
                       } else {
                         setPlayerTurn((prev) => (prev === "X" ? "O" : "X"));
+                        if (gameMode == "cpu") {
+                          const cpuMark = firstPlayerChoice === "X" ? "O" : "X";
+                          setTimeout(() => {
+                            const cpuPlay = getCpuMove(newBoard, cpuMark);
+                            if (cpuPlay !== undefined) {
+                              const lastBoard = [...newBoard];
+                              lastBoard[cpuPlay] = cpuMark;
+                              setBoard(lastBoard);
+                              setPlayerTurn(firstPlayerChoice);
+                              const cpuWinner = checkWinner(lastBoard);
+                              score(cpuWinner);
+                              if (cpuWinner) {
+                                openModal(cpuWinner);
+                              }
+                            }
+                          }, 300);
+                        }
                       }
                     }}
                   />
