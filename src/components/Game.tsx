@@ -170,6 +170,7 @@ function Game({ onQuit, gameMode, firstPlayerChoice }: GameProps) {
                 <li className="aspect-square" key={index}>
                   <Cell
                     value={cell}
+                    playerTurn={playerTurn}
                     onClick={() => {
                       if (gameIsOver) return;
                       const newBoard = [...board];
