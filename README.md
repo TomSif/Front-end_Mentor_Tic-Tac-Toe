@@ -9,7 +9,7 @@
 [![Tailwind](https://img.shields.io/badge/tailwindcss_v4-0F172A?&logo=tailwindcss&logocolor=white)](https://tailwindcss.com/)
 [![TypeScript](https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-![Design preview for the Tic Tac Toe coding challenge](/images/screen-game.png)
+![Design preview for the Tic Tac Toe coding challenge](./public/images/screen-game.png)
 
 ### 🌐 Live Demo:
 
@@ -53,7 +53,7 @@ Users should be able to:
 
 ### Screenshot
 
-![Desktop](/images/screen-modale.png)
+![Desktop](./public/images/screen-modale.png)
 
 ### Links
 
