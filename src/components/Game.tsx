@@ -146,7 +146,6 @@ function Game({ onQuit, gameMode, firstPlayerChoice }: GameProps) {
             alt="logo XO"
           />
           <div
-            aria-description={`player turn is ${playerTurn}`}
             aria-live="polite"
             className="col-start-2 justify-self-center w-full min-h-full flex text-slate-300 pt-2 pb-2 gap-3 text-preset-4 game-cell items-center justify-center rounded-sm shadow-[inset_0_-4px_0_0_rgba(16,33,42,1)]"
           >
