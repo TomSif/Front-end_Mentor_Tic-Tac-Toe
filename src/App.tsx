@@ -1,12 +1,30 @@
 import "./index.css";
 import Menu from "./components/Menu";
 import Game from "./components/Game";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
-  const [firstPlayerChoice, setFirstPlayerChoice] = useState<"X" | "O">("X");
-  const [gameMode, setGameMode] = useState<"cpu" | "human" | null>(null);
-  const [currentView, setCurrentView] = useState<"menu" | "game">("menu");
+  const [firstPlayerChoice, setFirstPlayerChoice] = useState<"X" | "O">(() => {
+    const savedFirst = sessionStorage.getItem("firstPlayerChoice");
+    return savedFirst ? JSON.parse(savedFirst) : "X";
+  });
+  const [gameMode, setGameMode] = useState<"cpu" | "human" | null>(() => {
+    const savedGameMode = sessionStorage.getItem("gameMode");
+    return savedGameMode ? JSON.parse(savedGameMode) : null;
+  });
+  const [currentView, setCurrentView] = useState<"menu" | "game">(() => {
+    const savedView = sessionStorage.getItem("currentView");
+    return savedView ? JSON.parse(savedView) : "menu";
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "firstPlayerChoice",
+      JSON.stringify(firstPlayerChoice),
+    );
+    sessionStorage.setItem("gameMode", JSON.stringify(gameMode));
+    sessionStorage.setItem("currentView", JSON.stringify(currentView));
+  }, [firstPlayerChoice, gameMode, currentView]);
 
   const views = {
     menu: (
@@ -26,6 +44,8 @@ function App() {
           setFirstPlayerChoice("X");
           setGameMode(null);
           setCurrentView("menu");
+          sessionStorage.removeItem("board");
+          sessionStorage.removeItem("playerTurn");
         }}
       />
     ),

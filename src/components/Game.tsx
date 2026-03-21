@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cell from "./Cell";
 import Modal from "./Modal";
 import RestartModal from "./RestartModal";
@@ -60,11 +60,26 @@ function getCpuMove(board: ("X" | "O" | null)[], cpuMark: "X" | "O") {
 }
 
 function Game({ onQuit, gameMode, firstPlayerChoice }: GameProps) {
-  const [playerTurn, setPlayerTurn] = useState<"X" | "O">(firstPlayerChoice);
-  const [scoreX, setScoreX] = useState<number>(0);
-  const [scoreT, setScoreT] = useState<number>(0);
-  const [scoreO, setScoreO] = useState<number>(0);
-  const [board, setBoard] = useState<("X" | "O" | null)[]>(Array(9).fill(null));
+  const [playerTurn, setPlayerTurn] = useState<"X" | "O">(() => {
+    const savedPlayerTurn = sessionStorage.getItem("playerTurn");
+    return savedPlayerTurn ? JSON.parse(savedPlayerTurn) : firstPlayerChoice;
+  });
+  const [scoreX, setScoreX] = useState<number>(() => {
+    const savedX = sessionStorage.getItem("scoreX");
+    return savedX ? JSON.parse(savedX) : 0;
+  });
+  const [scoreT, setScoreT] = useState<number>(() => {
+    const savedT = sessionStorage.getItem("scoreT");
+    return savedT ? JSON.parse(savedT) : 0;
+  });
+  const [scoreO, setScoreO] = useState<number>(() => {
+    const savedO = sessionStorage.getItem("scoreO");
+    return savedO ? JSON.parse(savedO) : 0;
+  });
+  const [board, setBoard] = useState<("X" | "O" | null)[]>(() => {
+    const savedBoard = sessionStorage.getItem("board");
+    return savedBoard ? JSON.parse(savedBoard) : Array(9).fill(null);
+  });
   const [gameIsOver, setGameIsOver] = useState<boolean>(false);
   const [winnerIs, setWinnerIs] = useState<"X" | "O" | "Tie" | null>(null);
   const [isRestartPressed, setIsRestartPressed] = useState<boolean>(false);
@@ -106,6 +121,14 @@ function Game({ onQuit, gameMode, firstPlayerChoice }: GameProps) {
   function onCancel() {
     setIsRestartPressed(false);
   }
+
+  useEffect(() => {
+    sessionStorage.setItem("scoreX", JSON.stringify(scoreX));
+    sessionStorage.setItem("scoreO", JSON.stringify(scoreO));
+    sessionStorage.setItem("scoreT", JSON.stringify(scoreT));
+    sessionStorage.setItem("playerTurn", JSON.stringify(playerTurn));
+    sessionStorage.setItem("board", JSON.stringify(board));
+  }, [scoreX, scoreO, scoreT, playerTurn, board]);
 
   return (
     <div className="w-full flex flex-col items-center relative z-0">
